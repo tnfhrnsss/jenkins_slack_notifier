@@ -1,0 +1,23 @@
+server:
+  port: 8080
+
+feign:
+  client:
+    config:
+      default:
+        loggerLevel: full
+
+monitoring:
+  git:
+    repository.path:
+    branch: develop
+  slack:
+    token:
+    channel:
+      id:
+      name: #developer
+    admin.id: # ex) "@jj"
+
+logging:
+  level:
+    com.lzdk.monitoring: debug
