@@ -26,7 +26,9 @@ public class GitLogFlowService {
 
     public GitCommitHistory findLastLog(String projectId, String branch) {
         GitCommitHistory history = null;
-        File localPath = new File(StringUtils.join(repositoryPath, "/", projectId, "/.git"));
+        String repositoryUrl = StringUtils.join(repositoryPath, "/", projectId, "/.git");
+        log.debug("repository : {}", repositoryUrl);
+        File localPath = new File(repositoryUrl);
 
         try (Repository repository = new RepositoryBuilder().setGitDir(localPath).build()) {
             Repository existingRepo = new FileRepositoryBuilder()
