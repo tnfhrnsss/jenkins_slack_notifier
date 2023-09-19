@@ -1,6 +1,6 @@
-# When SonarQube Detects Code Smells (include Hotspots), Send Slack DM to code author
+# When jenkins builds fail, Send message to slack channel with commit author mention.
 
-It is an application that sends notifications to Slack when jenkins build fail.
+It is an application that sends notifications to Slack when Jenkins builds fail.
 
 ## Requirements
 
