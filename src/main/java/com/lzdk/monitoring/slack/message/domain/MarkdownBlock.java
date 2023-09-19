@@ -10,18 +10,15 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class Block implements JsonSerializable {
+public class MarkdownBlock implements JsonSerializable {
     private String type;
 
     private PlainText text;
 
-    private Accessory accessory;
-
-    public static Block createMarkdown(String message, String url) {
-        return new Block(
+    public static MarkdownBlock create(String message) {
+        return new MarkdownBlock(
             "section",
-            PlainText.create(TextType.MRKDWN, message),
-            Accessory.create("button", "Click Me", url)
+            PlainText.create(TextType.MRKDWN, message)
         );
     }
 

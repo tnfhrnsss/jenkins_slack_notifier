@@ -1,12 +1,10 @@
 package com.lzdk.monitoring.slack.message.service;
 
-import java.io.IOException;
+import java.util.Map;
 
-import com.lzdk.monitoring.slack.message.domain.Block;
-import com.lzdk.monitoring.slack.message.domain.BlockList;
-import com.lzdk.monitoring.slack.utils.SlackApiConfig;
-import com.slack.api.Slack;
-import com.slack.api.methods.SlackApiException;
+import com.lzdk.monitoring.slack.message.domain.SlackMessageCdo;
+import com.lzdk.monitoring.slack.service.SlackUserInfoService;
+import com.lzdk.monitoring.slack.utils.SlackProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -20,38 +18,32 @@ public class SlackSendMessageService {
     @Value("${monitoring.slack.admin.id:}")
     private String adminId;
 
-    private static final String PUSH_MESSAGE = "Code smells or Hotspots have been detected in SonarQube. Please fix them. component : ";
+    private final SlackMessageService slackMessageService;
 
-    static void publishMessage(String channelId, String message) {
-        var client = Slack.getInstance().methods();
-        try {
-            var result = client.chatPostMessage(r -> r
-                .token(SlackApiConfig.getToken())
-                .channel(channelId)
-                .blocksAsString(message)
-            );
-            log.info("result {}", result);
-        } catch (IOException | SlackApiException e) {
-            log.error("error: {}", e.getMessage(), e);
-        }
-    }
+    private final SlackBlockService slackBlockService;
 
-    public void send(String targetId, Object componentKey) {
-        publishMessage(targetId, makeBlocks(componentKey.toString()));
-    }
+    private final SlackUserInfoService slackUserInfoService;
 
-    public void sendToAdmin(Object componentKey) {
+    private void sendToAdmin(String message) {
         if (StringUtils.isEmpty(adminId)) {
-            log.debug("Author not found in the Slack channel. : {} ", componentKey.toString());
+            log.debug("Author not found in the Slack channel. : {} ", message);
         } else {
-            publishMessage(adminId, makeBlocks(componentKey.toString()));
+            slackMessageService.publish(adminId, slackBlockService.makeDmBlock(message));
         }
     }
 
-    private String makeBlocks(String componentKey) {
-        BlockList blocks = BlockList.create(
-            Block.createMarkdown(StringUtils.join(PUSH_MESSAGE, componentKey),"http://172.16.120.206:8080/view/all/job/build-dworks-develop/")
-        );
-        return blocks.toJson();
+    public void message(SlackMessageCdo slackMessageCdo) {
+        Map<String, String> slackUserProfiles = slackUserInfoService.findAll();
+
+        try {
+            if (slackUserProfiles.containsKey(slackMessageCdo.getTo())) {
+                String userId = slackUserProfiles.get(slackMessageCdo.getTo());
+                slackMessageService.publish(SlackProperties.getChannelId(), slackBlockService.makeChannelBlocks(userId, slackMessageCdo.getMessage()));
+            } else {
+                sendToAdmin(slackMessageCdo.getMessage());
+            };
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
     }
 }

@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.lzdk.monitoring.slack.channel.service.SlackConversationService;
-import com.lzdk.monitoring.slack.utils.SlackApiConfig;
+import com.lzdk.monitoring.slack.utils.SlackProperties;
 import com.slack.api.Slack;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +28,7 @@ public class SlackUserInfoService {
         members.forEach(user -> {
             try {
                 var result =  client.usersInfo(r ->
-                    r.token(SlackApiConfig.getToken()).user(user.trim())
+                    r.token(SlackProperties.getToken()).user(user.trim())
                 );
 
                 String email = result.getUser().getProfile().getEmail();

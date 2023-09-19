@@ -2,7 +2,7 @@ package com.lzdk.monitoring.slack.service;
 
 import java.util.List;
 
-import com.lzdk.monitoring.slack.utils.SlackApiConfig;
+import com.lzdk.monitoring.slack.utils.SlackProperties;
 import com.slack.api.Slack;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +18,7 @@ public class SlackUserService {
 
         try {
             var result =  client.conversationsMembers(r ->
-                r.token(SlackApiConfig.getToken()).channel(channelId)
+                r.token(SlackProperties.getToken()).channel(channelId)
             );
             return result.getMembers();
         } catch (Exception e) {

@@ -16,17 +16,17 @@ public class GitCommitHistory implements JsonSerializable {
 
     private String hashId;
 
-    private String author;
+    private CommitAuthor author;
 
     private String date;
 
     private String message;
 
-    public static GitCommitHistory create(String projectId, String hashId, String author, Date when, String fullMessage) {
+    public static GitCommitHistory create(String projectId, String hashId, String name, String email, Date when, String fullMessage) {
         return new GitCommitHistory(
             projectId,
             hashId,
-            author,
+            CommitAuthor.create(name, email),
             when.toString(),
             fullMessage
         );

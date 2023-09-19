@@ -10,9 +10,12 @@ feign:
 monitoring:
   git:
     repository.path:
-    branch: develop
+  jenkins:
+    consoleUrl:
   slack:
     token:
+    delivery:
+      message: "Jenkins Build Fail"
     channel:
       id:
       name: #developer

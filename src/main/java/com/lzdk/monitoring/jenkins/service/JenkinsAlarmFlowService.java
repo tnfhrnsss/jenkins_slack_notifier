@@ -1,11 +1,10 @@
 package com.lzdk.monitoring.jenkins.service;
 
-import java.util.Map;
-
 import com.lzdk.monitoring.git.domain.GitCommitHistory;
 import com.lzdk.monitoring.git.servicie.GitLogFlowService;
+import com.lzdk.monitoring.jenkins.domain.JenkinsMonitorSdo;
+import com.lzdk.monitoring.slack.message.domain.SlackMessageCdo;
 import com.lzdk.monitoring.slack.message.service.SlackSendMessageService;
-import com.lzdk.monitoring.slack.service.SlackUserInfoService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
@@ -19,39 +18,19 @@ public class JenkinsAlarmFlowService {
 
     private final GitLogFlowService gitLogFlowService;
 
-    private final SlackUserInfoService slackUserInfoService;
-
     @Async("taskExecutor")
-    public void alert(String projectId) {
+    public void alert(JenkinsMonitorSdo jenkinsMonitorSdo) {
         try {
-            sendMessage(gitLogFlowService.findLastLog(projectId));
-        } catch (Exception e) {
-            log.error(e.getMessage());
-        } finally {
-            //destroy();
-        }
-    }
-
-    private void sendMessage(GitCommitHistory gitCommitHistory) {
-        Map<String, String> slackUserProfiles = slackUserInfoService.findAll();
-
-        try {
-            slackUserProfiles
-                .entrySet().forEach(k -> {
-                    if (k.getKey().startsWith(gitCommitHistory.getAuthor())) {
-                        log.debug("author info : {}", k.getValue());
-                        slackSendMessageService.sendToAdmin(gitCommitHistory);
-                        //slackSendMessageService.send(k.getValue(), gitCommitHistory);
-                    } else {
-                        slackSendMessageService.sendToAdmin(gitCommitHistory);
-                    }
-                });
+            GitCommitHistory gitCommitHistory = gitLogFlowService.findLastLog(jenkinsMonitorSdo.getProjectId(), jenkinsMonitorSdo.getBranch());
+            if (gitCommitHistory != null) {
+                sendMessage(SlackMessageCdo.create(gitCommitHistory.getAuthor().getEmailAddress(), jenkinsMonitorSdo.getProjectId()));
+            }
         } catch (Exception e) {
             log.error(e.getMessage());
         }
     }
 
-    private void destroy() {
-      //  sonarQubeAuthorService.remove();
+    private void sendMessage(SlackMessageCdo slackMessageCdo) {
+        slackSendMessageService.message(slackMessageCdo);
     }
 }

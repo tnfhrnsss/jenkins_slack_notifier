@@ -10,18 +10,18 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class Accessory implements JsonSerializable {
+public class DmBlock implements JsonSerializable {
     private String type;
 
     private PlainText text;
 
-    private String url;
+    private Accessory accessory;
 
-    public static Accessory create(String url) {
-        return new Accessory(
-            "button",
-            PlainText.create(TextType.PLAIN_TEXT, "Click Me"),
-            url
+    public static DmBlock create(String message, String url) {
+        return new DmBlock(
+            "section",
+            PlainText.create(TextType.MRKDWN, message),
+            Accessory.create(url)
         );
     }
 
