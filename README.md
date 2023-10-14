@@ -25,7 +25,6 @@ It is an application that sends notifications to Slack when Jenkins builds fail.
           channel:
             id:
             name:
-          admin.id:
       ```
 * When a matching user does not exist in the Slack channel, it can be configured to send a direct message to the admin.
   * default matching with commit author email address and slack email address.
