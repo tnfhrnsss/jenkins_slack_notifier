@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class JenkinsMonitorSdo implements JsonSerializable {
-    private String projectId;
+    private String jobId;
 
     private String branch;
 

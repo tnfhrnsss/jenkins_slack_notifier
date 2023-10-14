@@ -19,7 +19,6 @@ monitoring:
     channel:
       id:
       name: #developer
-    admin.id: # ex) "@jj"
 
 logging:
   level:

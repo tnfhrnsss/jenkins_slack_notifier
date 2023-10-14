@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,8 +17,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class JenkinsMonitorController {
     private final JenkinsAlarmFlowService jenkinsAlarmFlowService;
 
-    @PostMapping("projects/{projectId}/{branch}/alarm")
-    public void alert(@PathVariable String projectId, @PathVariable String branch) {
-        jenkinsAlarmFlowService.alert(new JenkinsMonitorSdo(projectId, branch));
+    @PostMapping("projects/{projectId}/alarm")
+    public void alert(
+        @PathVariable String projectId,
+        @RequestBody JenkinsMonitorSdo jenkinsMonitorSdo
+    ) {
+        jenkinsAlarmFlowService.alert(projectId, jenkinsMonitorSdo);
     }
 }
