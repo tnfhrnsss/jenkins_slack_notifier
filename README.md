@@ -39,5 +39,6 @@ It is an application that sends notifications to Slack when Jenkins builds fail.
 ## output snapshot
 
 ### blog reference
+* https://tnfhrnsss.github.io/docs/sub-projects/jenkins_slack_notifier/
 
 
