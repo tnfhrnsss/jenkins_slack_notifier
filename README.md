@@ -29,17 +29,13 @@ It is an application that sends notifications to Slack when Jenkins builds fail.
       ```
 * When a matching user does not exist in the Slack channel, it can be configured to send a direct message to the admin.
   * default matching with commit author email address and slack email address.
-    ```
-      admin.id: "@admin"
-    ```
-
-    * run application
-        * build this project and run JenkinsMonitoringApplication.class
-        * [OR] java -jar jenkins_slack_notifier*.jar
-        * execute api
-          ```
-            curl -X POST 'http://localhost:7777/jenkins/projects/{projectId}/{branch}/alarm'
-          ```
+  * run application
+      * build this project and run JenkinsMonitoringApplication.class
+      * [OR] java -jar jenkins_slack_notifier*.jar
+      * execute api
+        ```
+          curl -X POST 'http://localhost:7777/jenkins/projects/{projectId}/{branch}/alarm'
+        ```
 
 ## output snapshot
 
