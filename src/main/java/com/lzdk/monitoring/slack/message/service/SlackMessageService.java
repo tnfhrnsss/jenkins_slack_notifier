@@ -22,6 +22,7 @@ public class SlackMessageService {
                 .channel(channelId)
                 .blocksAsString(message)
             );
+            log.debug("message {}", message);
             log.info("result {}", result);
         } catch (IOException | SlackApiException e) {
             log.error("error: {}", e.getMessage(), e);
