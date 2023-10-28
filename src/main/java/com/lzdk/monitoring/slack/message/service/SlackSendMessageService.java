@@ -27,7 +27,7 @@ public class SlackSendMessageService {
                 String userId = slackUserProfiles.get(slackMessageCdo.getTo());
                 slackMessageService.publish(SlackProperties.getChannelId(), slackBlockService.makeChannelBlocks(userId, slackMessageCdo.getMessage()));
             } else {
-                slackMessageService.publish(SlackProperties.getChannelId(), slackBlockService.makeChannelBlocks(slackMessageCdo.getMessage()));
+                slackMessageService.publish(SlackProperties.getChannelId(), slackBlockService.makeChannelBlocks("", slackMessageCdo.getMessage()));
             };
         } catch (Exception e) {
             log.error(e.getMessage());
