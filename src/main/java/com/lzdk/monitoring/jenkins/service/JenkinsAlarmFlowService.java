@@ -23,9 +23,7 @@ public class JenkinsAlarmFlowService {
     public void alert(String projectId, JenkinsMonitorSdo jenkinsMonitorSdo) {
         try {
             GitCommitHistory gitCommitHistory = gitLogFlowService.findLastLog(projectId, jenkinsMonitorSdo.getBranch());
-            if (gitCommitHistory != null) {
-                sendMessage(SlackMessageCdo.create(gitCommitHistory.getAuthor().getEmailAddress(), StringUtils.join("*[", jenkinsMonitorSdo.getJobId(), "]* ", projectId)));
-            }
+            sendMessage(SlackMessageCdo.create(gitCommitHistory.getAuthor().getEmailAddress(), StringUtils.join("*[", jenkinsMonitorSdo.getJobId(), "]* ", projectId)));
         } catch (Exception e) {
             log.error(e.getMessage());
         }
